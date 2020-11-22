@@ -1,18 +1,28 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <FolderTree v-bind:node="getRoot" @onClick="nodeWasClicked($event)" />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
-
+import FolderTree from "@/components/FolderTree.vue";
+import { mapGetters } from "vuex";
 export default {
   name: "Home",
   components: {
-    HelloWorld
+    FolderTree
+  },
+  data() {
+    return {};
+  },
+  computed: {
+    ...mapGetters(["getRoot"])
+  },
+  methods: {
+    nodeWasClicked(event) {
+      console.log("nodeWasClicked() event = ", event);
+    }
   }
 };
 </script>
