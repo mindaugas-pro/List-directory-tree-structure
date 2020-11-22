@@ -5,12 +5,12 @@
         {{ expanded ? "&#9660;" : "&#9658;" }}
       </span>
       <span v-else @click="nodeClicked()">&#9671;</span>
-      {{ node.name }}
+      {{ nodeLocal.name }}
       <span class="pointer" @click="createFolder()">&#43;</span>
     </div>
     <div v-if="expanded">
       <FolderTree
-        v-for="child in node.children"
+        v-for="child in nodeLocal.children"
         :key="child.name"
         :node="child"
         :depth="depth + 1"
@@ -32,45 +32,48 @@ export default {
   },
   data() {
     return {
-      expanded: false
+      expanded: false,
+      nodeLocal: this.node,
+      depthLocal: this.depth
     };
   },
   computed: {
     hasChildren() {
-      return this.node.children; // returns array if there is children, returns 'undefined' if there is no children
+      return this.nodeLocal.children; // returns array if there is children, returns 'undefined' if there is no children
+    },
+    folderCount: {
+      get() {
+        return this.$store.getters.getFolderCount;
+      },
+      set(value) {
+        this.$store.commit("SET_FOLDER_COUNT", value);
+      }
     }
   },
   methods: {
     nodeClicked() {
-      console.log("this.node = ", this.node);
       this.expanded = !this.expanded;
       if (this.hasChildren) {
-        console.log("nodeClicked()");
-        this.$emit("onClick", this.node);
+        this.$emit("onClick", this.nodeLocal);
       }
     },
     createFolder() {
-      if (this.node.children) {
+      if (this.nodeLocal.children) {
+        console.log("this.nodeLocal.children = ", this.nodeLocal.children);
+        this.folderCount = this.folderCount + 1;
         let obj = {
-          name: "folder 5"
+          name: "folder " + this.folderCount
         };
-        this.node.children.push(obj);
+        this.nodeLocal.children.push(obj);
       } else {
-        console.log(this.node);
-        // let obj = this.node;
-        // obj.children = [{ name: "folder" }];
-        // this.$set((this.node = obj));
-        // this.$set((this.node.children = [{ name: "folder" }]));
-        // this.expanded = !this.expanded;
-        this.node = Object.assign({}, this.node, {
-          children: [{ name: "folder" }]
+        console.log("this.nodeLocal.children =", this.nodeLocal.children);
+        this.folderCount = this.folderCount + 1;
+        let folderName = "folder " + this.folderCount;
+        this.nodeLocal = Object.assign({}, this.nodeLocal, {
+          children: [{ name: folderName }]
         });
+        this.expanded = !this.expanded;
       }
-    }
-  },
-  watch: {
-    name() {
-      return name;
     }
   }
 };
