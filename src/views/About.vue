@@ -1,5 +1,16 @@
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
+    <Tree :node="getRoot" />
   </div>
 </template>
+
+<script>
+import Tree from "@/components/Tree.vue";
+import { mapGetters } from "vuex";
+export default {
+  components: { Tree },
+  computed: {
+    ...mapGetters(["getRoot"])
+  }
+};
+</script>
