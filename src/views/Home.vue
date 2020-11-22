@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <h1>This is Home</h1>
     <FolderTree v-bind:node="getRoot" @onClick="nodeWasClicked($event)" />
   </div>
 </template>
