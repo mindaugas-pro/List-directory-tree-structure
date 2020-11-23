@@ -30,3 +30,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.move {
+  cursor: move;
+}
+</style>
