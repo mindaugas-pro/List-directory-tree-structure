@@ -1,10 +1,15 @@
 <template>
   <div>
-    <div class="node" :style="{ 'margin-left': `${depth * 20}px` }">
+    <div
+      class="node pointer"
+      draggable="true"
+      @dragstart="dragStart(node)"
+      :style="{ 'margin-left': `${depth * 20}px` }"
+    >
       <span class="type" @click="nodeClicked()">
         {{ expanded ? "&#9660;" : "&#9658;" }}
       </span>
-      {{ node.name }}
+      <span class="move">{{ node.name }}</span>
       <span v-if="expanded" class="pointer" @click="createFolder()">&#43;</span>
     </div>
     <div v-if="expanded">
@@ -92,6 +97,9 @@ export default {
         //   children: [{ name: folderName }]
         // });
       }
+    },
+    dragStart(node) {
+      console.log("drag started, node = ", node);
     }
   }
 };
@@ -103,5 +111,8 @@ export default {
 }
 .pointer {
   cursor: pointer;
+}
+.move {
+  cursor: move;
 }
 </style>
