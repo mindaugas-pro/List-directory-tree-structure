@@ -4,7 +4,6 @@
       <span class="type" @click="nodeClicked()">
         {{ expanded ? "&#9660;" : "&#9658;" }}
       </span>
-      <!-- <span v-else @click="nodeClicked()">&#9671;</span> -->
       {{ node.name }}
       <span v-if="expanded" class="pointer" @click="createFolder()">&#43;</span>
     </div>
