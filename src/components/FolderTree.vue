@@ -1,21 +1,22 @@
 <template>
   <div>
     <div class="node" :style="{ 'margin-left': `${depth * 20}px` }">
-      <span v-if="hasChildren" class="type" @click="nodeClicked()">
+      <span class="type" @click="nodeClicked()">
         {{ expanded ? "&#9660;" : "&#9658;" }}
       </span>
-      <span v-else @click="nodeClicked()">&#9671;</span>
-      {{ nodeLocal.name }}
-      <span class="pointer" @click="createFolder()">&#43;</span>
+      <!-- <span v-else @click="nodeClicked()">&#9671;</span> -->
+      {{ node.name }}
+      <span v-if="expanded" class="pointer" @click="createFolder()">&#43;</span>
     </div>
     <div v-if="expanded">
       <FolderTree
-        v-for="child in nodeLocal.children"
+        v-for="child in node.children"
         :key="child.name"
         :node="child"
         :depth="depth + 1"
-        @onClick="$emit('onClick', $event)"
+        @onClick="node => $emit('onClick', node)"
       />
+      <!-- @onClick accepts parameter 'node' and propagates it up to the parent -->
     </div>
   </div>
 </template>
@@ -32,14 +33,14 @@ export default {
   },
   data() {
     return {
-      expanded: false,
-      nodeLocal: this.node,
-      depthLocal: this.depth
+      expanded: false
+      // nodeLocal: this.node,
+      // depthLocal: this.depth
     };
   },
   computed: {
     hasChildren() {
-      return this.nodeLocal.children; // returns array if there is children, returns 'undefined' if there is no children
+      return this.node.children; // returns array if there is children, returns 'undefined' if there is no children
     },
     folderCount: {
       get() {
@@ -53,26 +54,44 @@ export default {
   methods: {
     nodeClicked() {
       this.expanded = !this.expanded;
-      if (this.hasChildren) {
-        this.$emit("onClick", this.nodeLocal);
+      if (!this.hasChildren) {
+        console.log("func nodeClicked, this.node = ", this.node);
+        this.$emit("onClick", this.node);
       }
     },
     createFolder() {
-      if (this.nodeLocal.children) {
-        console.log("this.nodeLocal.children = ", this.nodeLocal.children);
+      this.folderCount = this.folderCount + 1;
+      let obj = {
+        name: "folder " + this.folderCount,
+        children: []
+      };
+      this.node.children.push(obj);
+    },
+    createFolder2() {
+      if (this.node.children) {
+        console.log("if statement)");
+        console.log("this.node.children = ", this.node.children);
         this.folderCount = this.folderCount + 1;
         let obj = {
-          name: "folder " + this.folderCount
+          name: "folder " + this.folderCount,
+          children: []
         };
-        this.nodeLocal.children.push(obj);
+        this.node.children.push(obj);
       } else {
-        console.log("this.nodeLocal.children =", this.nodeLocal.children);
+        console.log("else statement");
+        console.log("this.node =", this.node);
+        console.log("this.expanded = ", this.expanded);
         this.folderCount = this.folderCount + 1;
         let folderName = "folder " + this.folderCount;
-        this.nodeLocal = Object.assign({}, this.nodeLocal, {
-          children: [{ name: folderName }]
-        });
-        this.expanded = !this.expanded;
+        this.node.children = [];
+        let obj = {
+          name: folderName
+        };
+        this.node.children.push(obj);
+        // this.expanded = true;
+        // this.node = Object.assign({}, this.node, {
+        //   children: [{ name: folderName }]
+        // });
       }
     }
   }
