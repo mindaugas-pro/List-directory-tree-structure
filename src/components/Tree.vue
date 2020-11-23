@@ -1,14 +1,20 @@
 <template>
   <div>
     <h1>{{ this.node.name }}</h1>
-    <Tree v-for="child in node.children" :key="child.name" :node="child">
-      {{ child.name }}
+    <Tree
+      v-for="child in node.children"
+      :key="child.name"
+      :node="child"
+      class="pointer"
+      @onClick="$emit('onClick', $event)"
+    >
+      <!-- {{ child.name }} -->
     </Tree>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+// import { mapGetters } from "vuex";
 export default {
   name: "Tree",
   props: {
@@ -24,7 +30,7 @@ export default {
       get() {
         return this.$store.getters.getRoot;
       }
-    },
+    }
     // node: {
     //   get() {
     //     return this.$store.getters.getNode;
@@ -33,9 +39,18 @@ export default {
     //     this.$store.commit("SET_NODE", value);
     //   }
     // },
-    ...mapGetters(["getRoot"])
+    // ...mapGetters(["getRoot"])
+  },
+  methods: {
+    makeDir() {
+      console.log("working");
+    }
   }
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped>
+.pointer {
+  cursor: pointer;
+}
+</style>
