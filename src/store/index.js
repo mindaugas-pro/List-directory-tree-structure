@@ -7,20 +7,27 @@ export default new Vuex.Store({
   state: {
     root: {
       name: "/",
+      id: 0,
       children: [
         {
           name: "folder 1",
+          id: 1,
           children: [
             {
-              name: "folder 2"
+              name: "folder 2",
+              id: 2,
+              children: []
             }
           ]
         },
         {
           name: "folder 3",
+          id: 3,
           children: [
             {
-              name: "folder 4"
+              name: "folder 4",
+              id: 4,
+              children: []
             }
           ]
         }
