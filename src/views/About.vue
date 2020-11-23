@@ -1,6 +1,6 @@
 <template>
   <div class="about">
-    <Tree :node="getRoot" />
+    <Tree :node="getRoot" @onClick="nodeWasClicked($event)" />
   </div>
 </template>
 
@@ -11,6 +11,11 @@ export default {
   components: { Tree },
   computed: {
     ...mapGetters(["getRoot"])
+  },
+  methods: {
+    nodeWasClicked(event) {
+      console.log("I was clicked = ", event);
+    }
   }
 };
 </script>
