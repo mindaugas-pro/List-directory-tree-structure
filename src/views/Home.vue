@@ -2,6 +2,7 @@
   <div class="home">
     <h1>This is Home</h1>
     <FolderTree v-bind:node="getRoot" @onClick="nodeWasClicked($event)" />
+    <!-- $event is second parameter passed to $emit() func -->
   </div>
 </template>
 
@@ -21,8 +22,10 @@ export default {
     ...mapGetters(["getRoot"])
   },
   methods: {
-    nodeWasClicked(event) {
-      console.log("nodeWasClicked() event = ", event);
+    nodeWasClicked(node) {
+      console.log("nodeWasClicked() node = ", node);
+      // alert(node.name);
+      // console.log(this.getRoot.children);
     }
   }
 };
