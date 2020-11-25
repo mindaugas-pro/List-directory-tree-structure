@@ -33,9 +33,10 @@ export default new Vuex.Store({
         }
       ]
     },
-    node: Object,
-    nodeLocal: Object,
-    folderCount: 4
+    folderCount: 4,
+    draggable: Object,
+    draggableParent: Object,
+    draggableProps: Object
   },
   mutations: {
     SET_ROOT(state, value) {
@@ -47,8 +48,11 @@ export default new Vuex.Store({
     SET_FOLDER_COUNT(state, value) {
       state.folderCount = value;
     },
-    SET_NODE_LOCAL(state, value) {
-      state.nodeLocal = value;
+    SET_DRAGGABLE(state, value) {
+      state.draggable = value;
+    },
+    SET_DRAGGABLE_PARENT(state, value) {
+      state.draggableParent = value;
     }
   },
   getters: {
@@ -61,8 +65,11 @@ export default new Vuex.Store({
     getFolderCount: state => {
       return state.folderCount;
     },
-    getNodeLocal: state => {
-      return state.nodeLocal;
+    getDraggable: state => {
+      return state.draggable;
+    },
+    getDraggableParent: state => {
+      return state.draggableParent;
     }
   },
   actions: {},
