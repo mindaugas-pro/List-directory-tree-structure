@@ -117,7 +117,12 @@ export default {
         });
       } else {
         console.log("statement 4");
-        this.draggableParent.node.children = [];
+        this.draggableParent.node.children.forEach((element, index) => {
+          if (element.id === this.draggable.node.id) {
+            droppable.node.children.push(this.draggable.node);
+            this.draggableParent.node.children.splice(index, 1);
+          }
+        });
       }
     }
   }
