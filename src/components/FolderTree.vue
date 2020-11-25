@@ -3,7 +3,9 @@
     <div
       class="node pointer"
       draggable="true"
-      @dragstart="dragStart(node)"
+      @dragstart="dragStart($props)"
+      @dragover.prevent
+      @drop.prevent="drop($props, node)"
       :style="{ 'margin-left': `${depth * 20}px` }"
     >
       <span class="type" @click="nodeClicked()">
@@ -15,7 +17,7 @@
     <div v-if="expanded">
       <FolderTree
         v-for="child in node.children"
-        :key="child.name"
+        :key="child.id"
         :node="child"
         :depth="depth + 1"
         @onClick="node => $emit('onClick', node)"
@@ -26,6 +28,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "FolderTree",
   props: {
@@ -38,14 +41,10 @@ export default {
   data() {
     return {
       expanded: false
-      // nodeLocal: this.node,
-      // depthLocal: this.depth
     };
   },
   computed: {
-    hasChildren() {
-      return this.node.children; // returns array if there is children, returns 'undefined' if there is no children
-    },
+    ...mapGetters(["getRoot"]),
     folderCount: {
       get() {
         return this.$store.getters.getFolderCount;
@@ -53,53 +52,73 @@ export default {
       set(value) {
         this.$store.commit("SET_FOLDER_COUNT", value);
       }
+    },
+    draggable: {
+      get() {
+        return this.$store.getters.getDraggable;
+      },
+      set(value) {
+        this.$store.commit("SET_DRAGGABLE", value);
+      }
+    },
+    draggableProps: {
+      get() {
+        return this.$store.getters.getdraggableProps;
+      },
+      set(value) {
+        this.$store.commit("SET_DRAGGABLE_PROPS", value);
+      }
+    },
+    draggableParent: {
+      get() {
+        return this.$store.getters.getDraggableParent;
+      },
+      set(value) {
+        this.$store.commit("SET_DRAGGABLE_PARENT", value);
+      }
     }
   },
   methods: {
     nodeClicked() {
       this.expanded = !this.expanded;
-      if (!this.hasChildren) {
-        console.log("func nodeClicked, this.node = ", this.node);
-        this.$emit("onClick", this.node);
-      }
+      this.$emit("onClick", this.node);
     },
     createFolder() {
       this.folderCount = this.folderCount + 1;
       let obj = {
         name: "folder " + this.folderCount,
+        id: this.folderCount,
         children: []
       };
       this.node.children.push(obj);
     },
-    createFolder2() {
-      if (this.node.children) {
-        console.log("if statement)");
-        console.log("this.node.children = ", this.node.children);
-        this.folderCount = this.folderCount + 1;
-        let obj = {
-          name: "folder " + this.folderCount,
-          children: []
-        };
-        this.node.children.push(obj);
-      } else {
-        console.log("else statement");
-        console.log("this.node =", this.node);
-        console.log("this.expanded = ", this.expanded);
-        this.folderCount = this.folderCount + 1;
-        let folderName = "folder " + this.folderCount;
-        this.node.children = [];
-        let obj = {
-          name: folderName
-        };
-        this.node.children.push(obj);
-        // this.expanded = true;
-        // this.node = Object.assign({}, this.node, {
-        //   children: [{ name: folderName }]
-        // });
-      }
+    dragStart(props) {
+      this.draggable = props;
+      this.draggableParent = this.$parent.$props;
     },
-    dragStart(node) {
-      console.log("drag started, node = ", node);
+    drop(props) {
+      let droppable = props;
+      if (droppable.node.id === this.draggableParent.node.id) {
+        console.log("statement 1");
+        return;
+      } else if (droppable.node.id === this.draggable.node.id) {
+        console.log("statement 2");
+        return;
+      } else if (
+        droppable.node.id !== this.draggableParent.node.id &&
+        droppable.depth === this.draggable.depth
+      ) {
+        console.log("statement 3");
+        this.draggableParent.node.children.forEach((element, index) => {
+          if (element.id === this.draggable.node.id) {
+            droppable.node.children.push(this.draggable.node);
+            this.draggableParent.node.children.splice(index, 1);
+          }
+        });
+      } else {
+        console.log("statement 4");
+        this.draggableParent.node.children = [];
+      }
     }
   }
 };
