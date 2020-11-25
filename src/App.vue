@@ -1,10 +1,27 @@
 <template>
   <div id="app">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/About">About</router-link>
-    <router-view />
+    <h1>Folder Tree</h1>
+    <FolderTree :node="getRoot" />
   </div>
 </template>
+
+<script>
+// @ is an alias to /src
+import FolderTree from "@/components/FolderTree.vue";
+import { mapGetters } from "vuex";
+export default {
+  name: "Home",
+  components: {
+    FolderTree
+  },
+  data() {
+    return {};
+  },
+  computed: {
+    ...mapGetters(["getRoot"])
+  }
+};
+</script>
 
 <style>
 #app {
@@ -14,17 +31,7 @@
   text-align: center;
   color: #2c3e50;
 }
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+.move {
+  cursor: move;
 }
 </style>
