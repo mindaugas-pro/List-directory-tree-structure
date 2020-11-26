@@ -23,13 +23,11 @@
         :node="child"
         :depth="depth + 1"
       />
-      <!-- @onClick accepts parameter 'node' and propagates it up to the parent -->
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 export default {
   name: "FolderTree",
   props: {
@@ -45,7 +43,6 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getRoot"]),
     folderCount: {
       get() {
         return this.$store.getters.getFolderCount;
@@ -82,10 +79,9 @@ export default {
   methods: {
     nodeClicked() {
       this.expanded = !this.expanded;
-      // this.$emit("onClick", this.node);
     },
-    createFolder(props, node) {
-      if (props.depth === 0) {
+    createFolder(nodeProps, node) {
+      if (nodeProps.depth === 0) {
         this.createRootFolder();
       } else {
         let rootId = node.rootId;
@@ -129,7 +125,7 @@ export default {
       } else if (droppable.node.id === this.draggable.node.id) {
         window.alert("Drag to the same folder has no effect.");
         return;
-        // prevent drag to the same folder deeper level
+        // prevent drag to the same folder, but deeper level
       } else if (
         this.draggable.depth < droppable.depth &&
         this.draggable.node.rootId === droppable.node.rootId
