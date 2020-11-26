@@ -12,7 +12,9 @@
         {{ expanded ? "&#9660;" : "&#9658;" }}
       </span>
       <span class="move">{{ node.name }}</span>
-      <span v-if="expanded" class="pointer" @click="createFolder()">&#43;</span>
+      <span v-if="expanded" class="pointer" @click="createFolder($props, node)"
+        >&#43;</span
+      >
     </div>
     <div v-if="expanded">
       <FolderTree
@@ -75,7 +77,9 @@ export default {
       this.expanded = !this.expanded;
       this.$emit("onClick", this.node);
     },
-    createFolder() {
+    createFolder(props, node) {
+      console.log("props = ", props);
+      console.log("node = ", node);
       this.folderCount = this.folderCount + 1;
       let obj = {
         name: "folder " + this.folderCount,
@@ -100,10 +104,13 @@ export default {
         return;
       } else if (droppable.node.id !== this.draggableParent.node.id) {
         console.log("statement 3");
-        this.draggableParent.node.children.forEach((element, index) => {
+        console.log("droppable = ", droppable);
+        console.log("draggable = ", this.draggable);
+        console.log("this.draggableParent =", this.draggableParent);
+        droppable.node.children.push(this.draggable.node);
+        this.draggableParent.node.children.forEach(element => {
           if (element.id === this.draggable.node.id) {
-            droppable.node.children.push(this.draggable.node);
-            this.draggableParent.node.children.splice(index, 1);
+            // this.draggableParent.node.children.splice(index, 1);
           }
         });
       } else {
