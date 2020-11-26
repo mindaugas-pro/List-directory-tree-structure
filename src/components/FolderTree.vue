@@ -90,16 +90,15 @@ export default {
     },
     drop(props) {
       let droppable = props;
+      // prevent drag to the same folder level
       if (droppable.node.id === this.draggableParent.node.id) {
         console.log("statement 1");
         return;
+        // prevent drag to the same folder
       } else if (droppable.node.id === this.draggable.node.id) {
         console.log("statement 2");
         return;
-      } else if (
-        droppable.node.id !== this.draggableParent.node.id &&
-        droppable.depth === this.draggable.depth
-      ) {
+      } else if (droppable.node.id !== this.draggableParent.node.id) {
         console.log("statement 3");
         this.draggableParent.node.children.forEach((element, index) => {
           if (element.id === this.draggable.node.id) {
