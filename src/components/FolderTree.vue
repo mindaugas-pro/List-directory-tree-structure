@@ -70,6 +70,14 @@ export default {
       set(value) {
         this.$store.commit("SET_DRAGGABLE_PARENT", value);
       }
+    },
+    rootId: {
+      get() {
+        return this.$store.getters.getRootId;
+      },
+      set(value) {
+        this.$store.commit("SET_ROOT_ID", value);
+      }
     }
   },
   methods: {
@@ -78,12 +86,30 @@ export default {
       this.$emit("onClick", this.node);
     },
     createFolder(props, node) {
-      console.log("props = ", props);
-      console.log("node = ", node);
+      if (props.depth === 0) {
+        this.createRootFolder();
+      } else {
+        let rootId = node.rootId;
+        this.createChildFolder(rootId);
+      }
+    },
+    createRootFolder() {
+      this.folderCount = this.folderCount + 1;
+      this.rootId = this.rootId + 1;
+      let obj = {
+        name: "folder " + this.folderCount,
+        id: this.folderCount,
+        rootId: this.rootId,
+        children: []
+      };
+      this.node.children.push(obj);
+    },
+    createChildFolder(rootId) {
       this.folderCount = this.folderCount + 1;
       let obj = {
         name: "folder " + this.folderCount,
         id: this.folderCount,
+        rootId: rootId,
         children: []
       };
       this.node.children.push(obj);
