@@ -61,14 +61,6 @@ export default {
         this.$store.commit("SET_DRAGGABLE", value);
       }
     },
-    draggableProps: {
-      get() {
-        return this.$store.getters.getdraggableProps;
-      },
-      set(value) {
-        this.$store.commit("SET_DRAGGABLE_PROPS", value);
-      }
-    },
     draggableParent: {
       get() {
         return this.$store.getters.getDraggableParent;
