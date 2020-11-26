@@ -22,7 +22,6 @@
         :key="child.id"
         :node="child"
         :depth="depth + 1"
-        @onClick="node => $emit('onClick', node)"
       />
       <!-- @onClick accepts parameter 'node' and propagates it up to the parent -->
     </div>
@@ -83,7 +82,7 @@ export default {
   methods: {
     nodeClicked() {
       this.expanded = !this.expanded;
-      this.$emit("onClick", this.node);
+      // this.$emit("onClick", this.node);
     },
     createFolder(props, node) {
       if (props.depth === 0) {
@@ -122,25 +121,23 @@ export default {
       let droppable = props;
       // prevent drag to the same folder level
       if (droppable.node.id === this.draggableParent.node.id) {
-        console.log("statement 1");
+        window.alert(
+          "Dragg to the same folder deep will achieve the same result."
+        );
         return;
         // prevent drag to the same folder
       } else if (droppable.node.id === this.draggable.node.id) {
-        console.log("statement 2");
+        window.alert("Drag to the same folder has no effect.");
         return;
-      } else if (droppable.node.id !== this.draggableParent.node.id) {
-        console.log("statement 3");
-        console.log("droppable = ", droppable);
-        console.log("draggable = ", this.draggable);
-        console.log("this.draggableParent =", this.draggableParent);
-        droppable.node.children.push(this.draggable.node);
-        this.draggableParent.node.children.forEach(element => {
-          if (element.id === this.draggable.node.id) {
-            // this.draggableParent.node.children.splice(index, 1);
-          }
-        });
+        // prevent drag to the same folder deeper level
+      } else if (
+        this.draggable.depth < droppable.depth &&
+        this.draggable.node.rootId === droppable.node.rootId
+      ) {
+        window.alert("Drag to the same folder, but deeper level is forbidden");
+        return;
+        // drag and drop
       } else {
-        console.log("statement 4");
         this.draggableParent.node.children.forEach((element, index) => {
           if (element.id === this.draggable.node.id) {
             droppable.node.children.push(this.draggable.node);
