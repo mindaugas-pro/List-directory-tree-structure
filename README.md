@@ -1,4 +1,4 @@
-# alna-test
+# List directory tree structure (recursion)
 
 ## Project setup
 ```
