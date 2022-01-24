@@ -1,5 +1,5 @@
 # List directory tree structure (recursion)
-
+## Clone GitHub repository and run a project by executing the following commands:
 ## Project setup
 ```
 npm install
