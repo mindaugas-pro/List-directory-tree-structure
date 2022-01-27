@@ -1,5 +1,7 @@
 # List directory tree structure (recursion)
 
+[There is a link to the live project](https://mindaugas-pro.github.io/List-directory-tree-structure)
+
 This project allows to create a draggable (drag-and-drop) directory tree structure. Project starts with 2 directories and 2 subdirectories, but they are shrinked at the start of the project. Click small triangle sign on the left top corner of the screen to expand directories.
 
 By clicking on the + sign directory is added.
